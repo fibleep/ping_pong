@@ -17,7 +17,7 @@ window.color = rgb(29, 92, 47)
 table = Entity(model='cube', scale=(15, .5, 20), position=(0, 0, 0), color=rgb(20, 17, 92), texture='white_cube')
 net = Entity(parent=table, model='quad', scale=(.98, 3, .5), position=(0, .5, 0), color=color.white,
              texture='white_cube')
-ball = Entity(model='sphere', color=color.white, collider='sphere', position=(5, 0.5, 10))
+ball = Entity(model='sphere', color=color.white, collider='sphere', position=(0, 5, 0))
 racket = Entity(model='sphere', scale=(2, 0.5, 3), color=color.red, collider='sphere', position=(5, 0.5, -10))
 
 # adjusting the camera
@@ -25,14 +25,14 @@ racket = Entity(model='sphere', scale=(2, 0.5, 3), color=color.red, collider='sp
 camera.position = (0, 15, -30)
 camera.rotation_x = 30
 
-served = False
-
 
 def update():
     lmList = hand_tracker.get_position_of_hand()
     if len(lmList) != 0:
         racket.position = game_logic.calculate_position_of_racket(lmList[9], 1.6)
-    if hand_tracker.get_gesture(lmList) == 'fist' and not served:
+    if ball.z > table.z:
+        ball.position = (0, 5, 0)
+    if ball.position == (0, 5, 0) and hand_tracker.get_gesture(lmList) == 'fist':
         ball.position = racket.position
     ball.z = ball.z + 0.1
 
